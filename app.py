@@ -1,6 +1,18 @@
 from flask import Flask
+from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 
 app = Flask(__name__)
+
+REQUEST_COUNT = Counter(
+    "app_requests_total",
+    "Total number of application requests"
+)
+
+
+@app.before_request
+def count_requests():
+    REQUEST_COUNT.inc()
+
 
 @app.route("/")
 def home():
@@ -11,12 +23,13 @@ def home():
         </head>
         <body>
             <h1>Welcome to DevOps CI/CD Pipeline</h1>
-            <h2>Application version 2.0</h2>
+            <h2>Application version 2.0  cicd working</h2>
             <p>Git → GitHub → Jenkins → Docker → AWS EC2</p>
             <p>Monitoring: Prometheus → Grafana</p>
         </body>
     </html>
     """
+
 
 @app.route("/health")
 def health():
@@ -24,6 +37,14 @@ def health():
         "status": "healthy",
         "application": "devops-webapp"
     }
+
+
+@app.route("/metrics")
+def metrics():
+    return generate_latest(), 200, {
+        "Content-Type": CONTENT_TYPE_LATEST
+    }
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
