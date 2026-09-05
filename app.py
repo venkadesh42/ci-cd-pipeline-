@@ -11,7 +11,7 @@ def home():
         </head>
         <body>
             <h1>Welcome to DevOps CI/CD Pipeline</h1>
-            <h2>Application is Running Successfully</h2>
+            <h2>Application version 2.0</h2>
             <p>Git → GitHub → Jenkins → Docker → AWS EC2</p>
             <p>Monitoring: Prometheus → Grafana</p>
         </body>
